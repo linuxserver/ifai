@@ -15,6 +15,7 @@ return [
 
     'settings.version' => 'Version',
     'settings.background_image' => 'Background Image',
+    'settings.trianglify' => 'Trianglify',
     'settings.window_target' => 'Link opens in',
     'settings.window_target.current' => 'Open in this tab',
     'settings.window_target.one' => 'Open in the same tab',

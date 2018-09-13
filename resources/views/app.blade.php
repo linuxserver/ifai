@@ -91,6 +91,32 @@
         <script>!window.jQuery && document.write('<script src="/js/jquery-3.3.1.min.js"><\/script>')</script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="/js/app.js?v=2"></script>
+        @if ($trianglify == 'true')
+        <script src="/js/trianglify.min.js"></script>
+        <script>
+            function addTriangleTo(target) {
+               var dimensions = target.getClientRects()[0];
+               var pattern = Trianglify({
+                  width: dimensions.width,
+                  height: dimensions.height
+               });
+               target.style['background-image'] = 'url(' + pattern.png() + ')';
+               target.style['background-size'] = 'cover';
+               target.style['-webkit-background-size'] = 'cover';
+               target.style['-moz-background-size'] = 'cover';
+               target.style['-o-background-size'] = 'cover';
+            }
+
+            var resizeTimer;
+            $(window).on('resize', function(e) {
+               clearTimeout(resizeTimer);
+               resizeTimer = setTimeout(function() {
+                  addTriangleTo(app);
+               }, 400);
+            });
+        </script>
+        <script>addTriangleTo(app);</script>
+        @endif
         @yield('scripts')
         
     </body>
