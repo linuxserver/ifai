@@ -16,7 +16,7 @@
                 </label>
             </div>
                 <button type="submit"class="button"><i class="fa fa-save"></i><span>{{ __('app.buttons.save') }}</span></button>
-                <a href="{{ route('items.index', [], false) }}" class="button"><i class="fa fa-ban"></i><span>{{ __('app.buttons.cancel') }}</span></a>
+                <a href="{{ route('items.index', []) }}" class="button"><i class="fa fa-ban"></i><span>{{ __('app.buttons.cancel') }}</span></a>
             </div>
         </header>
         <div id="create" class="create">
@@ -56,7 +56,7 @@
                     <img src="{{ asset('storage/'.$icon) }}" />
                     {!! Form::hidden('icon', $icon, ['class' => 'form-control']) !!}
                     @else
-                    <img src="/img/heimdall-icon-small.png" />
+                    <img src="{{ asset('/img/heimdall-icon-small.png') }}" />
                     @endif
                     </div>
                     <div class="upload-btn-wrapper">
@@ -105,7 +105,7 @@
             <div class="section-title">&nbsp;</div>
             <div class="module-actions">
                 <button type="submit"class="button"><i class="fa fa-save"></i><span>{{ __('app.buttons.save') }}</span></button>
-                <a href="{{ route('items.index', [], false) }}" class="button"><i class="fa fa-ban"></i><span>{{ __('app.buttons.cancel') }}</span></a>
+                <a href="{{ route('items.index', []) }}" class="button"><i class="fa fa-ban"></i><span>{{ __('app.buttons.cancel') }}</span></a>
             </div>
         </footer>
 

@@ -30,11 +30,11 @@ class ItemController extends Controller
     {
         $data['apps'] = Item::whereHas('parents', function ($query) {
             $query->where('id', 0);
-        })->pinned()->orderBy('order', 'asc')->get();
+        })->orWhere('type', 1)->pinned()->orderBy('order', 'asc')->get();
 
         $data['all_apps'] = Item::whereHas('parents', function ($query) {
             $query->where('id', 0);
-        })->orderBy('order', 'asc')->get();
+        })->orWhere('type', 1)->orderBy('order', 'asc')->get();
 
         //$data['all_apps'] = Item::doesntHave('parents')->get();
         //die(print_r($data['apps']));
@@ -66,7 +66,7 @@ class ItemController extends Controller
         $item = Item::findOrFail($id);
         $item->pinned = true;
         $item->save();
-        $route = route('dash', [], false);
+        $route = route('dash', []);
         return redirect($route);
     }
 
@@ -80,7 +80,7 @@ class ItemController extends Controller
         $item = Item::findOrFail($id);
         $item->pinned = false;
         $item->save();
-        $route = route('dash', [], false);
+        $route = route('dash', []);
         return redirect($route);
     }
 
@@ -105,7 +105,7 @@ class ItemController extends Controller
             $data['ajax'] = true;
             return view('sortable', $data);
         } else {
-            $route = route('dash', [], false);
+            $route = route('dash', []);
             return redirect($route);
         }
     }
@@ -140,7 +140,7 @@ class ItemController extends Controller
         //
         $data['tags'] = Item::ofType('tag')->orderBy('title', 'asc')->pluck('title', 'id');
         $data['tags']->prepend(__('app.dashboard'), 0);
-        $data['current_tags'] = [];
+        $data['current_tags'] = collect([0 => __('app.dashboard')]);
         return view('items.create', $data);
 
     }
@@ -188,7 +188,7 @@ class ItemController extends Controller
 
         $item->parents()->sync($request->tags);
 
-        $route = route('dash', [], false);
+        $route = route('dash', []);
         return redirect($route)
             ->with('success', __('app.alert.success.item_created'));
     }
@@ -265,7 +265,7 @@ class ItemController extends Controller
 
         $item->parents()->sync($request->tags);
 
-        $route = route('dash', [], false);
+        $route = route('dash', []);
         return redirect($route)
             ->with('success',__('app.alert.success.item_updated'));
     }
@@ -288,7 +288,7 @@ class ItemController extends Controller
             Item::find($id)->delete();
         }
 
-        $route = route('items.index', [], false);
+        $route = route('items.index', []);
         return redirect($route)       
             ->with('success',__('app.alert.success.item_deleted'));
     }
@@ -306,7 +306,7 @@ class ItemController extends Controller
                 ->where('id', $id)
                 ->restore();      
         
-        $route = route('items.inded', [], false);
+        $route = route('items.index', []);
         return redirect($route)
             ->with('success',__('app.alert.success.item_restored'));
     }

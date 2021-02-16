@@ -38,7 +38,15 @@ Apart from the Laravel dependencies, namely PHP >= 7.1.3, OpenSSL PHP Extension,
 
 If you find you can't change the background make sure `php_fileinfo` is enabled in your php.ini. I believe it should be by default, but one user came across the issue on a windows system.
 
-Installation is as simple as cloning the repository somewhere, or downloading and extracting the zip/tar and pointing your httpd document root to the `/public` folder. For simple testing you could just go to the folder and type `php artisan serve`
+Installation is as simple as cloning the repository somewhere, or downloading and extracting the zip/tar and pointing your httpd document root to the `/public` folder then creating the .env file and generating an encryption key (this is all taken care of for you with the docker). 
+
+```
+cd /path/to/heimdall
+cp .env.example .env
+php artisan key:generate
+```
+
+For simple testing you could just go to the folder and type `php artisan serve`
 
 There is also a multi-arch Docker which supports x86-64, armhf and arm64, instructions on how to use them at
 
@@ -129,11 +137,10 @@ location / {
     auth_basic "Restricted";
     auth_basic_user_file /config/nginx/.htpasswd;
     include /config/nginx/proxy.conf;
-    proxy_pass https://heimdall:443;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_pass http://heimdall;
 }
 ```
-
-If you are using HTTPS and things aren't working try adding `FORCE_HTTPS=true` to the end of your `.env` file or proxy to the https version of the app.
 
 ### Self-signed certificates and local CAs
 Per default Heimdall uses the standard certificate bundle file (`ca-certificates.crt`) to verify HTTPS sites and will ignore additional certificates placed in `/etc/ssl/certs`. If you wish to use enhanced apps with HTTPS sites that use a self-signed certificate or certs signed with your own local CA, you can override the default bundle:

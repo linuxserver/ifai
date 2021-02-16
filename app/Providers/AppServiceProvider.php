@@ -72,14 +72,22 @@ class AppServiceProvider extends ServiceProvider
                 explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
             }
             if(!\Auth::check()) {
-                if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+                if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])
+                        && !empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
                     $credentials = ['username' => $_SERVER['PHP_AUTH_USER'], 'password' => $_SERVER['PHP_AUTH_PW']];
                     
-                    if (\Auth::attempt($credentials)) {
+                    if (\Auth::attempt($credentials, true)) {
                         // Authentication passed...
                         $user = \Auth::user();
                         //\Session::put('current_user', $user);
                         session(['current_user' => $user]);                
+                    }
+                }
+                elseif(isset($_SERVER['REMOTE_USER']) && !empty($_SERVER['REMOTE_USER'])) {
+                    $user = User::where('username', $_SERVER['REMOTE_USER'])->first();
+                    if ($user) {
+                        \Auth::login($user, true);
+                        session(['current_user' => $user]);
                     }
                 }
             }
@@ -87,7 +95,7 @@ class AppServiceProvider extends ServiceProvider
 
             $alt_bg = '';
             if($bg_image = Setting::fetch('background_image')) {
-                $alt_bg = ' style="background-image: url(/storage/'.$bg_image.')"';
+                $alt_bg = ' style="background-image: url(storage/'.$bg_image.')"';
             }
             $lang = Setting::fetch('language');
             \App::setLocale($lang);
