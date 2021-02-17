@@ -65,7 +65,7 @@ You can do this by using `http(s)://docker_name:port` in the config section. Ins
 ## Languages
 The app has been translated into several languages; however, the quality of the translations could do with work. If you would like to improve them, or help with other translations, they are stored in `/resources/lang/`.
 
-To create a new language translation, make a new folder with the ISO 3166-1 alpha-2 code as the name, copy `app.php` from `/resources/lang/en/app.php` into your new folder and replace the English strings.
+To create a new language translation, make a new folder with the ISO 3166-1 alpha-2 code as the name, copy `*.php` from `/resources/lang/en/*.php` into your new folder and replace the English strings.
 
 When you are finished, create a pull request.
 
@@ -78,6 +78,7 @@ Currently added languages are
 - Swedish
 - Spanish
 - Turkish
+- Chinese
 
 ## Web Server Configuration
 
